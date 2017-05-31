@@ -7,6 +7,7 @@ defmodule GingerbreadHouse.Service do
         import Supervisor.Spec, warn: false
 
         children = [
+            supervisor(GingerbreadHouse.Service.Repo, [])
         ]
 
         opts = [strategy: :one_for_one, name: GingerbreadHouse.Service.Supervisor]
