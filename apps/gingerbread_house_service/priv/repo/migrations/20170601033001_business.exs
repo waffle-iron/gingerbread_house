@@ -23,12 +23,6 @@ defmodule GingerbreadHouse.Service.Repo.Migrations.Business do
             add :address, :string,
                 null: false
 
-            add :representative_name, :string,
-                null: false
-
-            add :representative_date_of_birth, :date,
-                null: false
-
             timestamps()
         end
 
