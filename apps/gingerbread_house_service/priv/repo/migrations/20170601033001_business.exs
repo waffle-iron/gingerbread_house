@@ -2,11 +2,13 @@ defmodule GingerbreadHouse.Service.Repo.Migrations.Business do
     use Ecto.Migration
 
     def change do
+        GingerbreadHouse.Service.Business.TypeEnum.create_type()
+
         create table(:businesses) do
             add :entity, :uuid,
                 null: false
 
-            add :type, :string,
+            add :type, :business_type,
                 null: false
 
             add :name, :string,

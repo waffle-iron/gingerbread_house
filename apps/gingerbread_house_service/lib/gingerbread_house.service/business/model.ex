@@ -15,7 +15,7 @@ defmodule GingerbreadHouse.Service.Business.Model do
       Is the entity the business belongs to. Is an `UUID`.
 
       ###:type
-      Is the type of business. Is a `string`.
+      Is the type of business. Is a `GingerbreadHouse.Service.Business.TypeEnum`.
 
       ###:name
       Is the name of the business. Is a `string`.
@@ -33,7 +33,7 @@ defmodule GingerbreadHouse.Service.Business.Model do
 
     schema "businesses" do
         field :entity, Ecto.UUID
-        field :type, :string
+        field :type, GingerbreadHouse.Service.Business.TypeEnum
         field :name, :string
         field :contact, :string
         field :country, :string

@@ -5,7 +5,7 @@ defmodule GingerbreadHouse.Service.Business.ModelTest do
 
     @valid_model %Business.Model{
         entity: Ecto.UUID.generate(),
-        type: "company",
+        type: :company,
         name: "test pty ltd",
         contact: "+0123",
         country: "FR",
@@ -25,7 +25,7 @@ defmodule GingerbreadHouse.Service.Business.ModelTest do
     test "only type" do
         refute_change(%Business.Model{}, %{ type: @valid_model.type }, :insert_changeset)
 
-        assert_change(@valid_model, %{ type: "individual" }, :update_changeset)
+        assert_change(@valid_model, %{ type: :individual }, :update_changeset)
     end
 
     test "only name" do
