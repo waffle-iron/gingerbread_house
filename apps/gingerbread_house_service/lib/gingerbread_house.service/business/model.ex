@@ -29,6 +29,9 @@ defmodule GingerbreadHouse.Service.Business.Model do
 
       ###:address
       Is the address of the business. Is a `string`.
+
+      ###:additional_details
+      Any additional details to associate with the business. Is a `map`.
     """
 
     schema "businesses" do
@@ -38,6 +41,7 @@ defmodule GingerbreadHouse.Service.Business.Model do
         field :contact, :string
         field :country, :string
         field :address, :string
+        field :additional_details, :map
         timestamps()
     end
 
@@ -57,7 +61,7 @@ defmodule GingerbreadHouse.Service.Business.Model do
     """
     def insert_changeset(struct, params \\ %{}) do
         struct
-        |> cast(params, [:entity, :type, :name, :contact, :country, :address])
+        |> cast(params, [:entity, :type, :name, :contact, :country, :address, :additional_details])
         |> validate_required([:entity, :type, :name, :contact, :country, :address])
         |> validate_length(:country, is: 2)
         |> format_uppercase(:country)
@@ -80,7 +84,7 @@ defmodule GingerbreadHouse.Service.Business.Model do
     """
     def update_changeset(struct, params \\ %{}) do
         struct
-        |> cast(params, [:entity, :type, :name, :contact, :country, :address])
+        |> cast(params, [:entity, :type, :name, :contact, :country, :address, :additional_details])
         |> validate_emptiness(:entity)
         |> validate_emptiness(:type)
         |> validate_emptiness(:name)

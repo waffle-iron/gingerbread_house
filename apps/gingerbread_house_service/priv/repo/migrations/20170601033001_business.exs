@@ -25,6 +25,10 @@ defmodule GingerbreadHouse.Service.Repo.Migrations.Business do
             add :address, :string,
                 null: false
 
+            add :additional_details, :map,
+                default: "{}",
+                null: false
+
             timestamps()
         end
 

@@ -9,7 +9,8 @@ defmodule GingerbreadHouse.Service.Business.ModelTest do
         name: "test pty ltd",
         contact: "+0123",
         country: "FR",
-        address: "123 test st, foo"
+        address: "123 test st, foo",
+        additional_details: %{ "abn" => "1234" }
     }
 
     test "empty" do
@@ -52,6 +53,12 @@ defmodule GingerbreadHouse.Service.Business.ModelTest do
         assert_change(@valid_model, %{ address: "+123 foo st, bar" }, :update_changeset)
     end
 
+    test "only additional_details" do
+        refute_change(%Business.Model{}, %{ additional_details: @valid_model.additional_details }, :insert_changeset)
+
+        assert_change(@valid_model, %{ additional_details: %{ "acn" => "1111" } }, :update_changeset)
+    end
+
     test "without entity" do
         refute_change(@valid_model, %{ entity: nil }, :insert_changeset)
     end
@@ -74,6 +81,10 @@ defmodule GingerbreadHouse.Service.Business.ModelTest do
 
     test "without address" do
         refute_change(@valid_model, %{ address: nil }, :insert_changeset)
+    end
+
+    test "without additional_details" do
+        assert_change(@valid_model, %{ additional_details: nil }, :insert_changeset)
     end
 
     test "valid model" do
