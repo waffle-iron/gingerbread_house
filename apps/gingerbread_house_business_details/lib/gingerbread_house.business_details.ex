@@ -1,0 +1,2 @@
+defmodule GingerbreadHouse.BusinessDetails do
+end
