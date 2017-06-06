@@ -15,6 +15,15 @@ defmodule GingerbreadHouse.BusinessDetails do
         atom_to_module(country).new(details)
     end
 
+    defprotocol Mapper do
+        @spec to_map(any) :: t
+        def to_map(details)
+    end
+
+    def to_map(details) do
+        Mapper.to_map(details)
+    end
+
     @spec atom_to_module(String.t) :: atom
     defp atom_to_module(name) do
         String.to_atom(to_string(__MODULE__) <> "." <> format_as_module(name))
