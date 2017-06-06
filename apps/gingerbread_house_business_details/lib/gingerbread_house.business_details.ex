@@ -11,8 +11,8 @@ defmodule GingerbreadHouse.BusinessDetails do
 
     @callback new(t) :: struct()
 
-    def new(details = %{ country: country }) do
-        atom_to_module(country).new(details)
+    def new(details = %{ country: country, type: type }) do
+        localised_module(country, type).new(details)
     end
 
     defprotocol Mapper do
@@ -24,9 +24,9 @@ defmodule GingerbreadHouse.BusinessDetails do
         Mapper.to_map(details)
     end
 
-    @spec atom_to_module(String.t) :: atom
-    defp atom_to_module(name) do
-        String.to_atom(to_string(__MODULE__) <> "." <> format_as_module(name))
+    @spec localised_module(String.t, atom) :: String.t
+    defp localised_module(country, type) do
+        String.to_atom(to_string(__MODULE__) <> "." <> String.upcase(country) <> "." <> format_as_module(to_string(type)))
     end
 
     @spec format_as_module(String.t) :: String.t
