@@ -23,4 +23,13 @@ defmodule GingerbreadHouse.BusinessDetails.AU.Address do
         :postcode,
         :state
     ]
+
+    alias GingerbreadHouse.BusinessDetails.AU.Address
+
+    @type t :: %Address{
+        street: String.t,
+        city: String.t,
+        postcode: String.t,
+        state: String.t
+    }
 end
