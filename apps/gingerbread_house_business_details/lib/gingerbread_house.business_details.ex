@@ -1,7 +1,11 @@
 defmodule GingerbreadHouse.BusinessDetails do
+    @moduledoc """
+      Handle conversion between general purpose map and type specific business struct.
+    """
+
     @type t :: %{
-        optional(:type) => :individual | :company,
-        optional(:country) => String.t,
+        required(:type) => :individual | :company,
+        required(:country) => String.t,
         optional(:name) => String.t,
         optional(:contact) => String.t,
         optional(:address) => %{ optional(String.t) => String.t },
@@ -11,6 +15,12 @@ defmodule GingerbreadHouse.BusinessDetails do
 
     @callback new(t) :: struct()
 
+    @doc """
+      Create a business struct from the given map info.
+
+      Country and type fields of the map must be specified. The other fields are optional.
+    """
+    @spec new(t) :: struct()
     def new(details = %{ country: country, type: type }) do
         localised_module(country, type).new(details)
     end
@@ -20,6 +30,10 @@ defmodule GingerbreadHouse.BusinessDetails do
         def to_map(details)
     end
 
+    @doc """
+      Convert a business struct to a general purpose map.
+    """
+    @spec to_map(struct()) :: t
     def to_map(details) do
         Mapper.to_map(details)
     end
