@@ -28,7 +28,7 @@ defmodule GingerbreadHouse.Service.Business.Model do
       is registered. Is a 2 character uppercase `string`.
 
       ###:address
-      Is the address of the business. Is a `string`.
+      Is the address of the business. Is a `map`.
 
       ###:additional_details
       Any additional details to associate with the business. Is a `map`.
@@ -40,7 +40,7 @@ defmodule GingerbreadHouse.Service.Business.Model do
         field :name, :string
         field :contact, :string
         field :country, :string
-        field :address, :string
+        field :address, :map
         field :additional_details, :map
         timestamps()
     end

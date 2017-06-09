@@ -9,7 +9,7 @@ defmodule GingerbreadHouse.Service.Business.ModelTest do
         name: "test pty ltd",
         contact: "+0123",
         country: "FR",
-        address: "123 test st, foo",
+        address: %{ "street" => "123 test st", "city" => "foo" },
         additional_details: %{ "abn" => "1234" }
     }
 
@@ -50,7 +50,7 @@ defmodule GingerbreadHouse.Service.Business.ModelTest do
     test "only address" do
         refute_change(%Business.Model{}, %{ address: @valid_model.address }, :insert_changeset)
 
-        assert_change(@valid_model, %{ address: "+123 foo st, bar" }, :update_changeset)
+        assert_change(@valid_model, %{ address: %{ "street" => "123 foo st", "city" => "bar" } }, :update_changeset)
     end
 
     test "only additional_details" do

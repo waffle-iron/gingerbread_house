@@ -22,7 +22,7 @@ defmodule GingerbreadHouse.Service.Repo.Migrations.Business do
                 null: false,
                 comment: "The ISO 3166-1 alpha-2 code for the country"
 
-            add :address, :string,
+            add :address, :map,
                 null: false
 
             add :additional_details, :map,
