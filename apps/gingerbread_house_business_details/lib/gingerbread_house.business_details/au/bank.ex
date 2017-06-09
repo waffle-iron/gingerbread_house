@@ -15,4 +15,11 @@ defmodule GingerbreadHouse.BusinessDetails.AU.Bank do
         :bsb,
         :account_number
     ]
+
+    alias GingerbreadHouse.BusinessDetails.AU.Bank
+
+    @type t :: %Bank{
+        bsb: String.t,
+        account_number: String.t
+    }
 end
