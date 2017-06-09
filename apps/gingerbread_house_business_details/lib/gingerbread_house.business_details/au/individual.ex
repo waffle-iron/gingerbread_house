@@ -33,6 +33,14 @@ defmodule GingerbreadHouse.BusinessDetails.AU.Individual do
     alias GingerbreadHouse.BusinessDetails.AU.Bank
     alias GingerbreadHouse.BusinessDetails.AU.Individual
 
+    @type t :: %Individual{
+        name: String.t,
+        contact: String.t,
+        address: Address.t,
+        abn: String.t,
+        bank: Bank.t
+    }
+
     @behaviour GingerbreadHouse.BusinessDetails
 
     def new(details) do
