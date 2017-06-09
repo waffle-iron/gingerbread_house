@@ -19,10 +19,7 @@ defmodule GingerbreadHouse.Service.Business do
 
     @spec update(uuid, struct()) :: :ok | { :error, String.t }
     def update(entity, details) do
-        query = from business in Business.Model,
-            where: business.entity == ^entity
-
-        with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.one(query) },
+        with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
              { :update, { :ok, _ } } <- { :update, GingerbreadHouse.Service.Repo.update(Business.Model.update_changeset(business, BusinessDetails.to_map(details))) } do
                 :ok
         else
@@ -33,15 +30,20 @@ defmodule GingerbreadHouse.Service.Business do
 
     @spec delete(uuid) :: :ok | { :error, String.t }
     def delete(entity) do
-        query = from business in Business.Model,
-            where: business.entity == ^entity
-
-        with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.one(query) },
+        with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
              { :delete, { :ok, _ } } <- { :delete, GingerbreadHouse.Service.Repo.delete(business) } do
                 :ok
         else
             { :business, _ } -> { :error, "Business does not exist" }
             { :delete, _ } -> { :error, "Failed to delete business info" }
+        end
+    end
+
+    @spec get(uuid) :: { :ok, struct() } | { :error, String.t }
+    def get(entity) do
+        case GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) do
+            business = %Business.Model{} -> { :ok, BusinessDetails.new(business) }
+            _ -> { :error, "Business does not exist" }
         end
     end
 end
