@@ -34,11 +34,11 @@ defmodule GingerbreadHouse.BusinessDetails.AU.Individual do
     alias GingerbreadHouse.BusinessDetails.AU.Individual
 
     @type t :: %Individual{
-        name: String.t,
-        contact: String.t,
-        address: Address.t,
-        abn: String.t,
-        bank: Bank.t
+        name: String.t | nil,
+        contact: String.t | nil,
+        address: Address.t | nil,
+        abn: String.t | nil,
+        bank: Bank.t | nil
     }
 
     @behaviour GingerbreadHouse.BusinessDetails
