@@ -1,4 +1,26 @@
 defmodule GingerbreadHouse.BusinessDetails.AU.Individual do
+    @moduledoc """
+      A struct representing an Australian business of individual structure (e.g. sole
+      trader or partnership).
+
+      ##Fields
+
+      ###:name
+      Is the name of the business. Is a `string`.
+
+      ###:contact
+      Is the contact method for the business. Is a `string`.
+
+      ###:address
+      Is the address of the business is located at. Is a `string`.
+
+      ###:abn
+      Is the Australian buiness number of the business. Is a `string`.
+
+      ###:bank
+      Is the bank account for the business. Is a `GingerbreadHouse.BusinessDetails.AU.Bank`.
+    """
+
     defstruct [
         :name,
         :contact,
