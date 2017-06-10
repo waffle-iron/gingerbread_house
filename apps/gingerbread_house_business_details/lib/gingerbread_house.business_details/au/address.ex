@@ -32,4 +32,8 @@ defmodule GingerbreadHouse.BusinessDetails.AU.Address do
         postcode: String.t,
         state: String.t
     }
+
+    defimpl GingerbreadHouse.BusinessDetails.Mapper, for: Address do
+        def to_map(%{ street: street, city: city, postcode: postcode, state: state }), do: %{ "street" => street, "city" => city, "postcode" => postcode, "state" => state }
+    end
 end

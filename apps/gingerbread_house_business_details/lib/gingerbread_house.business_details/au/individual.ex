@@ -29,6 +29,7 @@ defmodule GingerbreadHouse.BusinessDetails.AU.Individual do
         :bank
     ]
 
+    alias GingerbreadHouse.BusinessDetails
     alias GingerbreadHouse.BusinessDetails.AU.Address
     alias GingerbreadHouse.BusinessDetails.AU.Bank
     alias GingerbreadHouse.BusinessDetails.AU.Individual
@@ -84,7 +85,7 @@ defmodule GingerbreadHouse.BusinessDetails.AU.Individual do
         defp set_contact(details, %{ contact: contact }), do: Map.put(details, :contact, contact)
 
         defp set_address(details, %{ address: nil }), do: details
-        defp set_address(details, %{ address: %Address{ street: street, city: city, postcode: postcode, state: state } }), do: Map.put(details, :address, %{ "street" => street, "city" => city, "postcode" => postcode, "state" => state })
+        defp set_address(details, %{ address: address }), do: Map.put(details, :address, BusinessDetails.to_map(address))
 
         defp set_abn(details, %{ abn: nil }), do: details
         defp set_abn(details = %{ additional_details: additional_details }, %{ abn: abn }), do: Map.put(details, :additional_details, Map.put(additional_details, "abn", abn))

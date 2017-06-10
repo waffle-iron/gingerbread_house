@@ -3,13 +3,15 @@ defmodule GingerbreadHouse.BusinessDetails do
       Handle conversion between general purpose map and type specific business struct.
     """
 
+    @type generic_map :: %{ optional(String.t) => String.t }
+
     @type t :: %{
         required(:type) => :individual | :company,
         required(:country) => String.t,
         optional(:name) => String.t,
         optional(:contact) => String.t,
-        optional(:address) => %{ optional(String.t) => String.t },
-        optional(:additional_details) => %{ optional(String.t) => String.t },
+        optional(:address) => generic_map,
+        optional(:additional_details) => generic_map,
         optional(any) => any
     }
 
@@ -26,14 +28,14 @@ defmodule GingerbreadHouse.BusinessDetails do
     end
 
     defprotocol Mapper do
-        @spec to_map(any) :: t
+        @spec to_map(any) :: BusinessDetails.t | BusinessDetails.generic_map
         def to_map(details)
     end
 
     @doc """
-      Convert a business struct to a general purpose map.
+      Convert a business struct or element to a general purpose map.
     """
-    @spec to_map(struct()) :: t
+    @spec to_map(struct()) :: t | generic_map
     def to_map(details) do
         Mapper.to_map(details)
     end
