@@ -22,7 +22,7 @@ defmodule GingerbreadHouse.Service.Business.Representative.Model do
       Is the individual's date of birth. Is a `date`.
 
       ###:address
-      Is the address of the individual. Is a `string`.
+      Is the address of the individual. Is a `map`.
 
       ###:owner
       Indicates whether the individual is an owner or not. Is a `boolean`.
@@ -32,7 +32,7 @@ defmodule GingerbreadHouse.Service.Business.Representative.Model do
         belongs_to :business, GingerbreadHouse.Service.Business.Model
         field :name, :string
         field :birth_date, Ecto.Date
-        field :address, :string
+        field :address, :map
         field :owner, :boolean
         timestamps()
     end

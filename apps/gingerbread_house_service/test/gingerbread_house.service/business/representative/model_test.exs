@@ -7,7 +7,7 @@ defmodule GingerbreadHouse.Service.Business.Representative.ModelTest do
         business_id: 1,
         name: "test",
         birth_date: ~D[2017-01-01],
-        address: "123 test st, foo",
+        address: %{ "street" => "123 test st", "city" => "foo" },
         owner: false
     }
 
@@ -36,7 +36,7 @@ defmodule GingerbreadHouse.Service.Business.Representative.ModelTest do
     test "only address" do
         refute_change(%Representative.Model{}, %{ address: @valid_model.address }, :insert_changeset)
 
-        assert_change(@valid_model, %{ address: "+123 foo st, bar" }, :update_changeset)
+        assert_change(@valid_model, %{ address: %{ "street" => "123 foo st", "city" => "bar" } }, :update_changeset)
     end
 
     test "only owner" do

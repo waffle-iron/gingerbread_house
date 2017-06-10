@@ -12,7 +12,7 @@ defmodule GingerbreadHouse.Service.Repo.Migrations.Representative do
             add :birth_date, :date,
                 null: false
 
-            add :address, :string,
+            add :address, :map,
                 null: false
 
             add :owner, :boolean,
