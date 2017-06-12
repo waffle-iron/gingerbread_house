@@ -5,6 +5,7 @@ defmodule GingerbreadHouse.Service.Business do
     import Ecto.Query
 
     @type uuid :: String.t
+    @type representative :: { integer, Business.Representative.t }
 
     @spec create(uuid, struct()) :: :ok | { :error, String.t }
     def create(entity, details) do
@@ -44,6 +45,56 @@ defmodule GingerbreadHouse.Service.Business do
         case GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) do
             business = %Business.Model{} -> { :ok, BusinessDetails.new(business) }
             _ -> { :error, "Business does not exist" }
+        end
+    end
+
+    @spec representatives(uuid) :: [representative]
+    def representatives(entity) do
+        query = from business in Business.Model,
+            where: business.entity == ^entity,
+            join: representative in Business.Representative.Model, on: representative.business_id == business.id,
+            select: { business.country, business.type, representative }
+
+        GingerbreadHouse.Service.Repo.all(query)
+        |> Enum.map(fn { country, type, representative} ->
+            { representative.id, Business.Representative.new(%{ representative | address: BusinessDetails.new(%{ country: country, type: type, address: representative.address }).address }) }
+        end)
+    end
+
+    @spec add_representative(uuid, Business.Representative.t) :: :ok | { :error, String.t }
+    def add_representative(entity, representative) do
+        with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
+             { :insert, { :ok, _ } } <- { :insert, GingerbreadHouse.Service.Repo.insert(Business.Representative.Model.insert_changeset(%Business.Representative.Model{}, Map.put(Business.Representative.to_map(representative), :business_id, business.id))) } do
+                :ok
+        else
+            { :business, _ } -> { :error, "Business does not exist" }
+            { :insert, _ } -> { :error, "Failed to add representative" }
+        end
+    end
+
+    @spec update_representative(uuid, integer, Business.Representative.t) :: :ok | { :error, String.t }
+    def update_representative(entity, id, representative) do
+        with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
+             { :representative, current_representative = %Business.Representative.Model{} } <- { :representative, GingerbreadHouse.Service.Repo.get_by(Business.Representative.Model, [id: id, business_id: business.id]) },
+             { :update, { :ok, _ } } <- { :update, GingerbreadHouse.Service.Repo.update(Business.Representative.Model.update_changeset(current_representative, Business.Representative.to_map(representative))) } do
+                :ok
+        else
+            { :business, _ } -> { :error, "Business does not exist" }
+            { :representative, _ } -> { :error, "Representative does not exist" }
+            { :update, _ } -> { :error, "Failed to update representative" }
+        end
+    end
+
+    @spec remove_representative(uuid, integer) :: :ok | { :error, String.t }
+    def remove_representative(entity, id) do
+        with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
+             { :representative, representative = %Business.Representative.Model{} } <- { :representative, GingerbreadHouse.Service.Repo.get_by(Business.Representative.Model, [id: id, business_id: business.id]) },
+             { :delete, :ok } <- { :delete, GingerbreadHouse.Service.Repo.delete(representative) } do
+                :ok
+        else
+            { :business, _ } -> { :error, "Business does not exist" }
+            { :representative, _ } -> { :error, "Representative does not exist" }
+            { :delete, _ } -> { :error, "Failed to delete representative" }
         end
     end
 end
