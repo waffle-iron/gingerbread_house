@@ -16,6 +16,17 @@ defmodule GingerbreadHouse.Service.Business.Representative do
     @type uuid :: String.t
     @type representative :: { integer, t }
 
+    @spec get(uuid, integer) :: { :ok, t } | { :error, String.t }
+    def get(entity, id) do
+        with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
+             { :representative, representative = %Representative.Model{} } <- { :representative, GingerbreadHouse.Service.Repo.get_by(Representative.Model, [id: id, business_id: business.id]) } do
+                { :ok, new(%{ representative | birth_date: Date.from_iso8601!(Ecto.Date.to_iso8601(representative.birth_date)), address: BusinessDetails.new(%{ country: business.country, type: business.type, address: representative.address }).address }) }
+        else
+            { :business, _ } -> { :error, "Business does not exist" }
+            { :representative, _ } -> { :error, "Representative does not exist" }
+        end
+    end
+
     @spec all(uuid) :: [representative]
     def all(entity) do
         query = from business in Business.Model,
