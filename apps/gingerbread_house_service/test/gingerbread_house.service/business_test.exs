@@ -45,58 +45,58 @@ defmodule GingerbreadHouse.Service.BusinessTest do
 
     test "add representative to business", %{ entity: entity, details: details, representative: representative } do
         :ok = Business.create(entity, details)
-        assert [] == Business.representatives(entity)
+        assert [] == Business.Representative.all(entity)
 
-        assert :ok == Business.add_representative(entity, representative)
-        assert [{ _, representative }] = Business.representatives(entity)
+        assert :ok == Business.Representative.create(entity, representative)
+        assert [{ _, representative }] = Business.Representative.all(entity)
     end
 
     test "add representative to non-existent business", %{ entity: entity, details: details, representative: representative } do
-        assert { :error, "Business does not exist" } == Business.add_representative(entity, representative)
-        assert [] = Business.representatives(entity)
+        assert { :error, "Business does not exist" } == Business.Representative.create(entity, representative)
+        assert [] = Business.Representative.all(entity)
     end
 
     test "update representative from business", %{ entity: entity, details: details, representative: representative } do
         :ok = Business.create(entity, details)
-        :ok = Business.add_representative(entity, representative)
-        [{ id, _ }] = Business.representatives(entity)
+        :ok = Business.Representative.create(entity, representative)
+        [{ id, _ }] = Business.Representative.all(entity)
 
-        assert :ok == Business.update_representative(entity, id, %{ representative | name: "bar" })
-        assert [{ id, %{ representative | name: "bar" } }] == Business.representatives(entity)
+        assert :ok == Business.Representative.update(entity, id, %{ representative | name: "bar" })
+        assert [{ id, %{ representative | name: "bar" } }] == Business.Representative.all(entity)
     end
 
     test "update representative from non-existent business", %{ entity: entity, details: details, representative: representative } do
-        assert { :error, "Business does not exist" } == Business.update_representative(entity, 1, %{ representative | name: "bar" })
+        assert { :error, "Business does not exist" } == Business.Representative.update(entity, 1, %{ representative | name: "bar" })
     end
 
     test "update non-existent representative from business", %{ entity: entity, details: details, representative: representative } do
         :ok = Business.create(entity, details)
-        :ok = Business.add_representative(entity, representative)
-        [{ id, _ }] = Business.representatives(entity)
+        :ok = Business.Representative.create(entity, representative)
+        [{ id, _ }] = Business.Representative.all(entity)
 
-        assert { :error, "Representative does not exist" } == Business.update_representative(entity, id + 1, %{ representative | name: "bar" })
-        assert [{ id, representative }] == Business.representatives(entity)
+        assert { :error, "Representative does not exist" } == Business.Representative.update(entity, id + 1, %{ representative | name: "bar" })
+        assert [{ id, representative }] == Business.Representative.all(entity)
     end
 
     test "remove representative from business", %{ entity: entity, details: details, representative: representative } do
         :ok = Business.create(entity, details)
-        :ok = Business.add_representative(entity, representative)
-        [{ id, _ }] = Business.representatives(entity)
+        :ok = Business.Representative.create(entity, representative)
+        [{ id, _ }] = Business.Representative.all(entity)
 
-        assert :ok == Business.remove_representative(entity, id)
-        assert [] == Business.representatives(entity)
+        assert :ok == Business.Representative.delete(entity, id)
+        assert [] == Business.Representative.all(entity)
     end
 
     test "remove representative from non-existent business", %{ entity: entity, details: details, representative: representative } do
-        assert { :error, "Business does not exist" } == Business.remove_representative(entity, 1)
+        assert { :error, "Business does not exist" } == Business.Representative.delete(entity, 1)
     end
 
     test "remove non-existent representative from business", %{ entity: entity, details: details, representative: representative } do
         :ok = Business.create(entity, details)
-        :ok = Business.add_representative(entity, representative)
-        [{ id, _ }] = Business.representatives(entity)
+        :ok = Business.Representative.create(entity, representative)
+        [{ id, _ }] = Business.Representative.all(entity)
 
-        assert { :error, "Representative does not exist" } == Business.remove_representative(entity, id + 1)
-        assert [{ id, representative }] == Business.representatives(entity)
+        assert { :error, "Representative does not exist" } == Business.Representative.delete(entity, id + 1)
+        assert [{ id, representative }] == Business.Representative.all(entity)
     end
 end
