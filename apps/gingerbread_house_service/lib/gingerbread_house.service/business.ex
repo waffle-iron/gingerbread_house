@@ -57,7 +57,7 @@ defmodule GingerbreadHouse.Service.Business do
 
         GingerbreadHouse.Service.Repo.all(query)
         |> Enum.map(fn { country, type, representative} ->
-            { representative.id, Business.Representative.new(%{ representative | address: BusinessDetails.new(%{ country: country, type: type, address: representative.address }).address }) }
+            { representative.id, Business.Representative.new(%{ representative | birth_date: Date.from_iso8601!(Ecto.Date.to_iso8601(representative.birth_date)), address: BusinessDetails.new(%{ country: country, type: type, address: representative.address }).address }) }
         end)
     end
 
