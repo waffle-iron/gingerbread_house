@@ -8,7 +8,8 @@ defmodule GingerbreadHouse.Service.BusinessTest do
         {
             :ok, %{
                 entity: Ecto.UUID.generate(),
-                details: %BusinessDetails.AU.Individual{ name: "foo", contact: "foo@bar", abn: "123", address: %BusinessDetails.AU.Address{ street: "123 Bar St", city: "test", postcode: "1234", state: "testing" }, bank: %BusinessDetails.AU.Bank{ bsb: "100", account_number: "1" } }
+                details: %BusinessDetails.AU.Individual{ name: "foo", contact: "foo@bar", abn: "123", address: %BusinessDetails.AU.Address{ street: "123 Bar St", city: "test", postcode: "1234", state: "testing" }, bank: %BusinessDetails.AU.Bank{ bsb: "100", account_number: "1" } },
+                representative: %Business.Representative{ name: "foo", birth_date: ~D[2017-01-01], address: %BusinessDetails.AU.Address{ street: "123 Bar St", city: "test", postcode: "1234", state: "testing" }, owner: false }
             }
         }
     end
@@ -40,5 +41,62 @@ defmodule GingerbreadHouse.Service.BusinessTest do
 
     test "delete non-existent business", %{ entity: entity, details: details } do
         assert { :error, "Business does not exist" } == Business.delete(entity)
+    end
+
+    test "add representative to business", %{ entity: entity, details: details, representative: representative } do
+        :ok = Business.create(entity, details)
+        assert [] == Business.representatives(entity)
+
+        assert :ok == Business.add_representative(entity, representative)
+        assert [{ _, representative }] = Business.representatives(entity)
+    end
+
+    test "add representative to non-existent business", %{ entity: entity, details: details, representative: representative } do
+        assert { :error, "Business does not exist" } == Business.add_representative(entity, representative)
+        assert [] = Business.representatives(entity)
+    end
+
+    test "update representative from business", %{ entity: entity, details: details, representative: representative } do
+        :ok = Business.create(entity, details)
+        :ok = Business.add_representative(entity, representative)
+        [{ id, _ }] = Business.representatives(entity)
+
+        assert :ok == Business.update_representative(entity, id, %{ representative | name: "bar" })
+        assert [{ id, %{ representative | name: "bar" } }] == Business.representatives(entity)
+    end
+
+    test "update representative from non-existent business", %{ entity: entity, details: details, representative: representative } do
+        assert { :error, "Business does not exist" } == Business.update_representative(entity, 1, %{ representative | name: "bar" })
+    end
+
+    test "update non-existent representative from business", %{ entity: entity, details: details, representative: representative } do
+        :ok = Business.create(entity, details)
+        :ok = Business.add_representative(entity, representative)
+        [{ id, _ }] = Business.representatives(entity)
+
+        assert { :error, "Representative does not exist" } == Business.update_representative(entity, id + 1, %{ representative | name: "bar" })
+        assert [{ id, representative }] == Business.representatives(entity)
+    end
+
+    test "remove representative from business", %{ entity: entity, details: details, representative: representative } do
+        :ok = Business.create(entity, details)
+        :ok = Business.add_representative(entity, representative)
+        [{ id, _ }] = Business.representatives(entity)
+
+        assert :ok == Business.remove_representative(entity, id)
+        assert [] == Business.representatives(entity)
+    end
+
+    test "remove representative from non-existent business", %{ entity: entity, details: details, representative: representative } do
+        assert { :error, "Business does not exist" } == Business.remove_representative(entity, 1)
+    end
+
+    test "remove non-existent representative from business", %{ entity: entity, details: details, representative: representative } do
+        :ok = Business.create(entity, details)
+        :ok = Business.add_representative(entity, representative)
+        [{ id, _ }] = Business.representatives(entity)
+
+        assert { :error, "Representative does not exist" } == Business.remove_representative(entity, id + 1)
+        assert [{ id, representative }] == Business.representatives(entity)
     end
 end
