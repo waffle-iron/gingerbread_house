@@ -89,7 +89,7 @@ defmodule GingerbreadHouse.Service.Business do
     def remove_representative(entity, id) do
         with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
              { :representative, representative = %Business.Representative.Model{} } <- { :representative, GingerbreadHouse.Service.Repo.get_by(Business.Representative.Model, [id: id, business_id: business.id]) },
-             { :delete, :ok } <- { :delete, GingerbreadHouse.Service.Repo.delete(representative) } do
+             { :delete, { :ok, _ } } <- { :delete, GingerbreadHouse.Service.Repo.delete(representative) } do
                 :ok
         else
             { :business, _ } -> { :error, "Business does not exist" }
