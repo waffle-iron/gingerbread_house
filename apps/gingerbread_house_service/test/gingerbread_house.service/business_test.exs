@@ -56,6 +56,26 @@ defmodule GingerbreadHouse.Service.BusinessTest do
         assert [] = Business.Representative.all(entity)
     end
 
+    test "get representative from business", %{ entity: entity, details: details, representative: representative } do
+        :ok = Business.create(entity, details)
+        :ok = Business.Representative.create(entity, representative)
+        [{ id, _ }] = Business.Representative.all(entity)
+
+        assert { :ok, representative } == Business.Representative.get(entity, id)
+    end
+
+    test "get representative from non-existent business", %{ entity: entity, details: details, representative: representative } do
+        assert { :error, "Business does not exist" } == Business.Representative.get(entity, 1)
+    end
+
+    test "get non-existent representative from business", %{ entity: entity, details: details, representative: representative } do
+        :ok = Business.create(entity, details)
+        :ok = Business.Representative.create(entity, representative)
+        [{ id, _ }] = Business.Representative.all(entity)
+
+        assert { :error, "Representative does not exist" } == Business.Representative.get(entity, id + 1)
+    end
+
     test "update representative from business", %{ entity: entity, details: details, representative: representative } do
         :ok = Business.create(entity, details)
         :ok = Business.Representative.create(entity, representative)
