@@ -1,6 +1,24 @@
 defmodule GingerbreadHouse.Service.Business.Representative do
     @moduledoc """
       Handles the management of business representatives.
+
+      The `Representative` struct is the representative's details.
+
+      ##Fields
+
+      ###:name
+      Is the name of the representative. Is a `string`.
+
+      ###:birth_date
+      Is the date of birth of the representative. Is a `date`.
+
+      ###:address
+      Is the address of the representative, it must be in the format of the business
+      address. Is a `struct`.
+
+      ###:owner
+      Whether the representative is an owner of the business (true) or not (false). Is
+      a `boolean`.
     """
     defstruct [:name, :birth_date, :address, :owner]
 
