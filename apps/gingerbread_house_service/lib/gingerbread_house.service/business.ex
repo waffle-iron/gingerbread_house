@@ -1,4 +1,7 @@
 defmodule GingerbreadHouse.Service.Business do
+    @moduledoc """
+      Handles the management of business details.
+    """
     use GenServer
     alias GingerbreadHouse.BusinessDetails
     alias GingerbreadHouse.Service.Business
@@ -21,6 +24,11 @@ defmodule GingerbreadHouse.Service.Business do
 
     @type uuid :: String.t
 
+    @doc """
+      Create a new business entry.
+
+      The entity should be the unique ID to reference this business.
+    """
     @spec create(uuid, struct()) :: :ok | { :error, String.t }
     def create(entity, details) do
         #todo: maybe add validated field, and set it to false, where a worker passes it along and attempts to validate it?
@@ -32,6 +40,11 @@ defmodule GingerbreadHouse.Service.Business do
         end
     end
 
+    @doc """
+      Update a business entry.
+
+      To update only certain business details, leave the other details for the business as `nil`.
+    """
     @spec update(uuid, struct()) :: :ok | { :error, String.t }
     def update(entity, details) do
         with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
@@ -43,6 +56,9 @@ defmodule GingerbreadHouse.Service.Business do
         end
     end
 
+    @doc """
+      Delete a business entry.
+    """
     @spec delete(uuid) :: :ok | { :error, String.t }
     def delete(entity) do
         with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
@@ -54,6 +70,9 @@ defmodule GingerbreadHouse.Service.Business do
         end
     end
 
+    @doc """
+      Get the details of a given business entry.
+    """
     @spec get(uuid) :: { :ok, struct() } | { :error, String.t }
     def get(entity) do
         case GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) do
