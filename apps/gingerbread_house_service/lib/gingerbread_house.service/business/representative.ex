@@ -1,4 +1,7 @@
 defmodule GingerbreadHouse.Service.Business.Representative do
+    @moduledoc """
+      Handles the management of business representatives.
+    """
     defstruct [:name, :birth_date, :address, :owner]
 
     alias GingerbreadHouse.BusinessDetails
@@ -16,6 +19,9 @@ defmodule GingerbreadHouse.Service.Business.Representative do
     @type uuid :: String.t
     @type representative :: { integer, t }
 
+    @doc """
+      Get the details of the business representative entry.
+    """
     @spec get(uuid, integer) :: { :ok, t } | { :error, String.t }
     def get(entity, id) do
         with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
@@ -27,6 +33,9 @@ defmodule GingerbreadHouse.Service.Business.Representative do
         end
     end
 
+    @doc """
+      Get the details for all representatives of a business.
+    """
     @spec all(uuid) :: [representative]
     def all(entity) do
         query = from business in Business.Model,
@@ -40,6 +49,9 @@ defmodule GingerbreadHouse.Service.Business.Representative do
         end)
     end
 
+    @doc """
+      Create a new representative for a business.
+    """
     @spec create(uuid, t) :: :ok | { :error, String.t }
     def create(entity, representative) do
         with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
@@ -51,6 +63,9 @@ defmodule GingerbreadHouse.Service.Business.Representative do
         end
     end
 
+    @doc """
+      Update the details of a business representative entry.
+    """
     @spec update(uuid, integer, t) :: :ok | { :error, String.t }
     def update(entity, id, representative) do
         with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
@@ -64,6 +79,9 @@ defmodule GingerbreadHouse.Service.Business.Representative do
         end
     end
 
+    @doc """
+      Delete a business representative entry.
+    """
     @spec delete(uuid, integer) :: :ok | { :error, String.t }
     def delete(entity, id) do
         with { :business, business = %Business.Model{} } <- { :business, GingerbreadHouse.Service.Repo.get_by(Business.Model, entity: entity) },
