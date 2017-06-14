@@ -1,8 +1,23 @@
 defmodule GingerbreadHouse.Service.Business do
+    use GenServer
     alias GingerbreadHouse.BusinessDetails
     alias GingerbreadHouse.Service.Business
     require Logger
     import Ecto.Query
+
+    def start_link() do
+        GenServer.start_link(__MODULE__, [], name: __MODULE__)
+    end
+
+    def handle_call({ :create, { entity, details }, :business }, _from, state), do: { :reply, Business.create(entity, details), state }
+    def handle_call({ :update, { entity, details }, :business }, _from, state), do: { :reply, Business.update(entity, details), state }
+    def handle_call({ :delete, { entity },          :business }, _from, state), do: { :reply, Business.delete(entity), state }
+    def handle_call({ :get,    { entity },          :business }, _from, state), do: { :reply, Business.get(entity), state }
+    def handle_call({ :create, { entity, details },     :representative }, _from, state), do: { :reply, Business.Representative.create(entity, details), state }
+    def handle_call({ :update, { entity, id, details }, :representative }, _from, state), do: { :reply, Business.Representative.update(entity, id, details), state }
+    def handle_call({ :delete, { entity, id },          :representative }, _from, state), do: { :reply, Business.Representative.delete(entity, id), state }
+    def handle_call({ :get,    { entity, id },          :representative }, _from, state), do: { :reply, Business.Representative.get(entity, id), state }
+    def handle_call({ :all,    { entity },              :representative }, _from, state), do: { :reply, Business.Representative.all(entity), state }
 
     @type uuid :: String.t
 
