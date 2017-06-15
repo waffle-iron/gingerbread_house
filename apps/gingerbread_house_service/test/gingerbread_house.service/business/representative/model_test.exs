@@ -7,6 +7,7 @@ defmodule GingerbreadHouse.Service.Business.Representative.ModelTest do
         business_id: 1,
         name: "test",
         birth_date: ~D[2017-01-01],
+        country: "FR",
         address: %{ "street" => "123 test st", "city" => "foo" },
         owner: false
     }
@@ -33,6 +34,12 @@ defmodule GingerbreadHouse.Service.Business.Representative.ModelTest do
         assert_change(@valid_model, %{ birth_date: ~D[2017-01-01] }, :update_changeset)
     end
 
+    test "only country" do
+        refute_change(%Representative.Model{}, %{ country: @valid_model.country }, :insert_changeset)
+
+        assert_change(@valid_model, %{ country: "AU" }, :update_changeset)
+    end
+
     test "only address" do
         refute_change(%Representative.Model{}, %{ address: @valid_model.address }, :insert_changeset)
 
@@ -55,6 +62,10 @@ defmodule GingerbreadHouse.Service.Business.Representative.ModelTest do
 
     test "without birth date" do
         refute_change(@valid_model, %{ birth_date: nil }, :insert_changeset)
+    end
+
+    test "without country" do
+        refute_change(@valid_model, %{ country: nil }, :insert_changeset)
     end
 
     test "without address" do

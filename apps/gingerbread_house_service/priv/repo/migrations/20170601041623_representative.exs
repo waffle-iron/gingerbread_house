@@ -12,6 +12,11 @@ defmodule GingerbreadHouse.Service.Repo.Migrations.Representative do
             add :birth_date, :date,
                 null: false
 
+            add :country, :char,
+                size: 2,
+                null: false,
+                comment: "The ISO 3166-1 alpha-2 code for the country"
+
             add :address, :map,
                 null: false
 

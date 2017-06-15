@@ -12,6 +12,11 @@ defmodule GingerbreadHouse.Service.Business.Representative do
       ###:birth_date
       Is the date of birth of the representative. Is a `date`.
 
+      ###:country
+      The country the address is in. Takes the form of a country code (ISO 3166-1 alpha-2)
+      indicating the country where the business is registered. Is a 2 character uppercase
+      `string`.
+
       ###:address
       Is the address of the representative, it must be in the format of the business
       address. Is a `struct`.
@@ -20,7 +25,7 @@ defmodule GingerbreadHouse.Service.Business.Representative do
       Whether the representative is an owner of the business (true) or not (false). Is
       a `boolean`.
     """
-    defstruct [:name, :birth_date, :address, :owner]
+    defstruct [:name, :birth_date, :country, :address, :owner]
 
     alias GingerbreadHouse.BusinessDetails
     alias GingerbreadHouse.Service.Business
@@ -31,6 +36,7 @@ defmodule GingerbreadHouse.Service.Business.Representative do
     @type t :: %Representative{
         name: String.t,
         birth_date: Date.t,
+        country: String.t,
         address: struct(),
         owner: boolean
     }
@@ -63,7 +69,7 @@ defmodule GingerbreadHouse.Service.Business.Representative do
 
         GingerbreadHouse.Service.Repo.all(query)
         |> Enum.map(fn { country, type, representative} ->
-            { representative.id, new(%{ representative | birth_date: Date.from_iso8601!(Ecto.Date.to_iso8601(representative.birth_date)), address: BusinessDetails.new(%{ country: country, type: type, address: representative.address }).address }) }
+            { representative.id, new(%{ representative | birth_date: Date.from_iso8601!(Ecto.Date.to_iso8601(representative.birth_date)), address: BusinessDetails.new(%{ country: representative.country, type: type, address: representative.address }).address }) }
         end)
     end
 
@@ -117,6 +123,7 @@ defmodule GingerbreadHouse.Service.Business.Representative do
         %Representative{}
         |> new_name(details)
         |> new_birth_date(details)
+        |> new_country(details)
         |> new_address(details)
         |> new_owner(details)
     end
@@ -126,6 +133,9 @@ defmodule GingerbreadHouse.Service.Business.Representative do
 
     defp new_birth_date(info, %{ birth_date: birth_date }), do: %{ info | birth_date: birth_date }
     defp new_birth_date(info, _), do: info
+
+    defp new_country(info, %{ country: country }), do: %{ info | country: country }
+    defp new_country(info, _), do: info
 
     defp new_address(info, %{ address: address }), do: %{ info | address: address }
     defp new_address(info, _), do: info
@@ -138,6 +148,7 @@ defmodule GingerbreadHouse.Service.Business.Representative do
         %{}
         |> set_name(representative)
         |> set_birth_date(representative)
+        |> set_country(representative)
         |> set_address(representative)
         |> set_owner(representative)
     end
@@ -147,6 +158,9 @@ defmodule GingerbreadHouse.Service.Business.Representative do
 
     defp set_birth_date(details, %{ birth_date: nil }), do: details
     defp set_birth_date(details, %{ birth_date: birth_date }), do: Map.put(details, :birth_date, birth_date)
+
+    defp set_country(details, %{ country: nil }), do: details
+    defp set_country(details, %{ country: country }), do: Map.put(details, :country, country)
 
     defp set_address(details, %{ address: nil }), do: details
     defp set_address(details, %{ address: address }), do: Map.put(details, :address, BusinessDetails.to_map(address))

@@ -21,6 +21,11 @@ defmodule GingerbreadHouse.Service.Business.Representative.Model do
       ###:birth_date
       Is the individual's date of birth. Is a `date`.
 
+      ###:country
+      The country the address is in. Takes the form of a country code (ISO 3166-1 alpha-2)
+      indicating the country where the business is registered. Is a 2 character uppercase
+      `string`.
+
       ###:address
       Is the address of the individual. Is a `map`.
 
@@ -32,6 +37,7 @@ defmodule GingerbreadHouse.Service.Business.Representative.Model do
         belongs_to :business, GingerbreadHouse.Service.Business.Model
         field :name, :string
         field :birth_date, Ecto.Date
+        field :country, :string
         field :address, :map
         field :owner, :boolean
         timestamps()
@@ -44,14 +50,19 @@ defmodule GingerbreadHouse.Service.Business.Representative.Model do
       * `business_id` field is required
       * `name` field is required
       * `birth_date` field is required
+      * `country` field is required
       * `address` field is required
       * `owner` field is required
+      * `country` field is length of 2
+      * formats the `country` field as uppercase
       * `business_id` field is associated with a business in `GingerbreadHouse.Service.Business.Model`
     """
     def insert_changeset(struct, params \\ %{}) do
         struct
-        |> cast(params, [:business_id, :name, :birth_date, :address, :owner])
-        |> validate_required([:business_id, :name, :birth_date, :address, :owner])
+        |> cast(params, [:business_id, :name, :birth_date, :country, :address, :owner])
+        |> validate_required([:business_id, :name, :birth_date, :country, :address, :owner])
+        |> validate_length(:country, is: 2)
+        |> format_uppercase(:country)
         |> assoc_constraint(:business)
     end
 
@@ -62,19 +73,25 @@ defmodule GingerbreadHouse.Service.Business.Representative.Model do
       * `business_id` field is not empty
       * `name` field is not empty
       * `birth_date` field is not empty
+      * `country` field is not empty
       * `address` field is not empty
       * `owner` field is not empty
+      * `country` field is length of 2
+      * formats the `country` field as uppercase
       * `business_id` field is associated with a business in `GingerbreadHouse.Service.Business.Model`
 
     """
     def update_changeset(struct, params \\ %{}) do
         struct
-        |> cast(params, [:business_id, :name, :birth_date, :address, :owner])
+        |> cast(params, [:business_id, :name, :birth_date, :country, :address, :owner])
         |> validate_emptiness(:business_id)
         |> validate_emptiness(:name)
         |> validate_emptiness(:birth_date)
+        |> validate_emptiness(:country)
         |> validate_emptiness(:address)
         |> validate_emptiness(:owner)
+        |> validate_length(:country, is: 2)
+        |> format_uppercase(:country)
         |> assoc_constraint(:business)
     end
 end
