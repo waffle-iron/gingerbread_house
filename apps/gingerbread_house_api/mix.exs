@@ -44,6 +44,7 @@ defmodule GingerbreadHouse.API.Mixfile do
     # Type "mix help deps" for more examples and options
     defp deps(false) do
         [
+            { :gingerbread_house_business_details, path: "../gingerbread_house_business_details" },
             { :gingerbread_house_service, path: "../gingerbread_house_service", only: :test },
             { :defecto, github: "ScrimpyCat/Defecto", only: :test }
         ]
