@@ -54,4 +54,13 @@ defmodule GingerbreadHouse.BusinessDetails do
         end)
         |> Enum.join(".")
     end
+
+    @doc """
+      Retrieve the country of the business struct or element.
+    """
+    @spec country(struct()) :: String.t
+    def country(%{ __struct__: module }) do
+        [_, _, country|_] = Module.split(module)
+        country
+    end
 end

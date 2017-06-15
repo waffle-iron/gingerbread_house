@@ -9,7 +9,7 @@ defmodule GingerbreadHouse.Service.BusinessTest do
             :ok, %{
                 entity: Ecto.UUID.generate(),
                 details: %BusinessDetails.AU.Individual{ name: "foo", contact: "foo@bar", abn: "123", address: %BusinessDetails.AU.Address{ street: "123 Bar St", city: "test", postcode: "1234", state: "testing" }, bank: %BusinessDetails.AU.Bank{ bsb: "100", account_number: "1" } },
-                representative: %Business.Representative{ name: "foo", birth_date: ~D[2017-01-01], address: %BusinessDetails.AU.Address{ street: "123 Bar St", city: "test", postcode: "1234", state: "testing" }, owner: false, country: "AU" }
+                representative: %Business.Representative{ name: "foo", birth_date: ~D[2017-01-01], address: %BusinessDetails.AU.Address{ street: "123 Bar St", city: "test", postcode: "1234", state: "testing" }, owner: false }
             }
         }
     end
