@@ -14,7 +14,7 @@ defmodule GingerbreadHouse.Service.Mixfile do
             build_embedded: Mix.env == :prod,
             start_permanent: Mix.env == :prod,
             aliases: aliases(),
-            deps: deps(),
+            deps: deps(Mix.Project.umbrella?),
             dialyzer: [plt_add_deps: :transitive]
         ]
     end
@@ -46,7 +46,8 @@ defmodule GingerbreadHouse.Service.Mixfile do
     #   {:my_app, in_umbrella: true}
     #
     # Type "mix help deps" for more examples and options
-    defp deps do
+    defp deps(false), do: deps(true) ++ [{ :gingerbread_house_business_details, path: "../gingerbread_house_business_details" }]
+    defp deps(true) do
         [
             { :ecto, "~> 2.1" },
             { :postgrex, "~> 0.13.2" },
