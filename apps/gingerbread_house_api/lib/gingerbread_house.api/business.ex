@@ -41,6 +41,6 @@ defmodule GingerbreadHouse.API.Business do
     """
     @spec get(uuid) :: { :ok, struct() } | { :error, String.t }
     def get(entity) do
-        GenServer.call(@serice, { :get, { entity }, @entity_type })
+        GenServer.call(@service, { :get, { entity }, @entity_type })
     end
 end
