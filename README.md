@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/ZURASTA/gingerbread_house.png?label=ready&title=Ready)](https://waffle.io/ZURASTA/gingerbread_house?utm_source=badge)
 # GingerbreadHouse (Business Management)
 
 Manages and verifies (_using Stripe_) business details for different countries.
